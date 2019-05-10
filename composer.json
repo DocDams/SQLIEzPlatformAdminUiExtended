@@ -1,5 +1,5 @@
 {
-  "name": "docdams/sqli_ezplatform_adminui_extended",
+  "name": "sqli/ezplatform_adminui_extended",
   "description": "SQLI eZPlatform AdminUI Extended is a bundle that add a new tab in admin top bar and allow to display and CRUD entities",
   "keywords": ["sqli", "ezplatform", "crud", "entities"],
   "homepage": "https://github.com/DocDams/EzPlatformAdminUiExtended",
