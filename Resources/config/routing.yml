@@ -1,0 +1,15 @@
+sqli_ez_platform_admin_ui_extended_entities_homepage:
+    path: /sqli-admin/entities/home
+    defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:listAllEntities }
+
+sqli_ez_platform_admin_ui_extended_entity_homepage:
+    path: /sqli-admin/entity/{fqcn}
+    defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:showEntity }
+
+sqli_ez_platform_admin_ui_extended_entity_remove_element:
+    path: /sqli-admin/entity/{fqcn}/remove/{compound_id}
+    defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:removeElement }
+
+sqli_ez_platform_admin_ui_extended_entity_edit_element:
+    path: /sqli-admin/entity/{fqcn}/edit/{compound_id}
+    defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:editElement }

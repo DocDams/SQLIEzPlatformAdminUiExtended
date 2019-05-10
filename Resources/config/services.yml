@@ -1,0 +1,44 @@
+services:
+    SQLI\EzPlatformAdminUiExtendedBundle\EventListener\:
+        resource: '../../EventListener/*'
+        autowire: true
+        autoconfigure: true
+        public: true
+        tags:
+            - { name: kernel.event_subscriber }
+
+    SQLI\EzPlatformAdminUiExtendedBundle\Controller\:
+        resource: "../../Controller/*"
+        autowire: true
+        autoconfigure: true
+        public: false
+        exclude: "../../Controller/{Controller}"
+
+    SQLI\EzPlatformAdminUiExtendedBundle\Services\Twig\:
+        resource: '../../Services/Twig/*'
+        autowire: true
+        autoconfigure: true
+        public: false
+        tags:
+            - { name: twig.extension }
+
+    sqli_admin_entities:
+        class: SQLI\EzPlatformAdminUiExtendedBundle\Services\EntityHelper
+        public: true
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@sqli_admin_annotation_entities"
+
+    sqli_admin_annotation_entities:
+        class: SQLI\EzPlatformAdminUiExtendedBundle\Annotations\SQLIAnnotationManager
+        public: true
+        arguments:
+            - "Entity"
+            - "%sqli_ez_platform_admin_ui_extended.entities.namespaces%"
+            - "%sqli_ez_platform_admin_ui_extended.entities.directories%"
+            - "%kernel.root_dir%"
+            - "@annotation_reader"
+
+parameters:
+    sqli_ez_platform_admin_ui_extended.entities.namespaces: []
+    sqli_ez_platform_admin_ui_extended.entities.directories: []

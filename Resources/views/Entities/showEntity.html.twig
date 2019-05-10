@@ -1,0 +1,90 @@
+{% extends 'EzPlatformAdminUiBundle::layout.html.twig' %}
+
+{% trans_default_domain 'sqli_admin' %}
+
+{% block breadcrumbs %}
+    {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
+        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
+        { value: 'entities.breadcrumb.list'|trans|desc('Entity'),
+            url: path( 'sqli_ez_platform_admin_ui_extended_entities_homepage' ) },
+        { value: class.classname }
+    ]} %}
+{% endblock %}
+
+{% block title %}{{ 'entity.page.title'|trans|desc('Entity page title') }}{% endblock %}
+
+{% block page_title %}
+    {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
+        title: 'entity.page.title'|trans|desc('Entity page title'),
+        iconName: 'object-state'
+    } %}
+{% endblock %}
+
+{% block content %}
+<section class="container my-4">
+    <div class="ez-table-header">
+        <div class="ez-table-header__headline">
+            {{ "entity.elements.table.header"|trans({'%fqcn%': fqcn})|raw }}
+        </div>
+    </div>
+    {% if elements|length == 0 %}
+        <p class="alert alert-warning">{{ 'entity.elements.table.no_elements'|trans }}</p>
+    {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                    {% for property_name, property_infos in class.properties %}
+                        {% if property_infos.visible is same as(true) %}
+                            <th><span title="{{ property_infos.accessibility }}">{{ property_name }}</span></th>
+                        {% endif %}
+                    {% endfor %}
+                    <th>
+                        {{ 'entity.elements.table.column_header.operations'|trans }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for element in elements %}
+                {{ block( 'sqli_entity_element' ) }}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {#{{ pagerfanta(articles, 'ez') }}#}
+</section>
+{% endblock %}
+
+{% block sqli_entity_element %}
+    {# Generate compound ID #}
+    {% set compound_id = [] %}
+    {% for column_name in class.primary_key %}
+        {% set compound_id = compound_id|merge( { (column_name): sqli_admin_attribute( element, column_name ) } ) %}
+    {% endfor %}
+    {% set compound_id = compound_id|json_encode %}
+
+    <tr>
+        {% for property_name, property_infos in class.properties %}
+            {% if property_infos.visible is same as(true) %}
+                <td>{{ sqli_admin_attribute( element, property_name ) }}</td>
+            {% endif %}
+        {% endfor %}
+        <td>
+            {% if class.annotation.update and is_granted( 'ez:sqli_admin:entity_edit_element' ) %}
+                <a href="{{ path( 'sqli_ez_platform_admin_ui_extended_entity_edit_element',
+                    { 'fqcn': fqcn, 'compound_id': compound_id }) }}">
+                    <img src="https://img.icons8.com/material-outlined/26/000000/pencil.png"
+                         alt="{{ 'entity.button.alt.edit'|trans }}"
+                         width="26" height="26" />
+                </a>
+            {% endif %}
+            {% if class.annotation.delete and is_granted( 'ez:sqli_admin:entity_remove_element' ) %}
+                <a href="{{ path( 'sqli_ez_platform_admin_ui_extended_entity_remove_element',
+                    { 'fqcn': fqcn, 'compound_id': compound_id }) }}">
+                    <img src="https://img.icons8.com/material-outlined/26/000000/trash.png"
+                         alt="{{ 'entity.button.alt.delete'|trans }}"
+                         width="26" height="26" />
+                </a>
+            {% endif %}
+        </td>
+    </tr>
+{% endblock %}

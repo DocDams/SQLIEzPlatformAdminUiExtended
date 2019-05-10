@@ -1,0 +1,28 @@
+{% extends 'EzPlatformAdminUiBundle::layout.html.twig' %}
+
+{% trans_default_domain 'sqli_admin' %}
+
+{% block breadcrumbs %}
+    {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
+        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
+        { value: 'entities.breadcrumb.list'|trans|desc('Entity'),
+            url: path( 'sqli_ez_platform_admin_ui_extended_entities_homepage' ) }
+    ]} %}
+{% endblock %}
+
+{% block title %}{{ 'entity.page.title'|trans|desc('Entity page title') }}{% endblock %}
+
+{% block page_title %}
+    {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
+        title: 'entity.page.title'|trans|desc('Entity page title'),
+        iconName: 'object-state'
+    } %}
+{% endblock %}
+
+{% block content %}
+    <section class="container my-4">
+        {{ form_start(form) }}
+        {{ form_row(form) }}
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

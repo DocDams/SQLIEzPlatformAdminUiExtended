@@ -1,0 +1,31 @@
+{
+  "name": "sqli/ezplatform_adminui_extended",
+  "description": "SQLI eZPlatform AdminUI Extended is a bundle that add a new tab in admin top bar and allow to display and CRUD entities",
+  "keywords": ["sqli", "ezplatform", "crud", "entities"],
+  "homepage": "https://github.com/DocDams/EzPlatformAdminUiExtended",
+  "type": "ezplatform-bundle",
+  "authors": [
+    {
+      "name": "SQLI",
+      "homepage": "http://www.sqli.com",
+    }
+  ],
+  "license": [
+    "MIT"
+  ],
+  "require": {
+    "php": "^7.1",
+    "doctrine/doctrine-bundle": "^1.6",
+    "doctrine/orm": "^2.5",
+    "ezsystems/ezpublish-kernel": "^7.0",
+    "ezsystems/ezplatform-admin-ui": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "SQLI\\EzPlatformAdminUiExtendedBundle\\": ""
+    }
+  }
+}
