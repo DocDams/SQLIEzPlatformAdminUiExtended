@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root('sqli_admin');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root('sqli_ez_platform_admin_ui_extended');
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
@@ -27,8 +27,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode( 'entities' )
                     ->children()
-                        ->scalarNode( 'directory' )->isRequired()->end()
-                        ->scalarNode( 'namespace' )->isRequired()->end()
+                        ->arrayNode( 'directories' )->isRequired()->end()
                     ->end()
                 ->end() // entities
             ->end();

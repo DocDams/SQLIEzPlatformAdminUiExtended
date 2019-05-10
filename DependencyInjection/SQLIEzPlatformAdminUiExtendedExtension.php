@@ -24,5 +24,10 @@ class SQLIEzPlatformAdminUiExtendedExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        foreach ($config as $key => $value)
+        {
+            $container->setParameter('sqli_ez_platform_admin_ui_extended.'.$key, $value);
+        }
     }
 }
