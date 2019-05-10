@@ -41,9 +41,7 @@ Configure directories and namespaces entities to lookup :
 ```yml
 parameters:
     sqli_ez_platform_admin_ui_extended.entities.directories:
-        - 'Acme/AcmeBundle/Entity/Doctrine'
-    sqli_ez_platform_admin_ui_extended.entities.namespaces:
-        - 'Acme\AcmeBundle\Entity\Doctrine'
+        Acme/AcmeBundle/Entity/Doctrine: ~
 ```
 
 Annotations on entities :

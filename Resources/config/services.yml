@@ -34,11 +34,9 @@ services:
         public: true
         arguments:
             - "Entity"
-            - "%sqli_ez_platform_admin_ui_extended.entities.namespaces%"
             - "%sqli_ez_platform_admin_ui_extended.entities.directories%"
             - "%kernel.root_dir%"
             - "@annotation_reader"
 
 parameters:
-    sqli_ez_platform_admin_ui_extended.entities.namespaces: []
     sqli_ez_platform_admin_ui_extended.entities.directories: []

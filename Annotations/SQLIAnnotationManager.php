@@ -19,8 +19,6 @@ class SQLIAnnotationManager
      */
     private $annotation;
     /** @var array */
-    private $namespaces;
-    /** @var array */
     private $directories;
     /** @var Reader */
     private $annotationReader;
@@ -30,11 +28,10 @@ class SQLIAnnotationManager
      */
     private $rootDir;
 
-    public function __construct( $annotation, $namespaces, $directories, $rootDir, Reader $annotationReader )
+    public function __construct( $annotation, $directories, $rootDir, Reader $annotationReader )
     {
         $this->annotation       = $annotation;
-        $this->namespaces       = is_array( $namespaces ) ? $namespaces : [ $namespaces ];
-        $this->directories      = is_array( $directories ) ? $directories : [ $directories ];
+        $this->directories      = $directories;
         $this->rootDir          = $rootDir;
         $this->annotationReader = $annotationReader;
     }
@@ -71,8 +68,13 @@ class SQLIAnnotationManager
         $annotatedClasses = [];
 
         // Scan all files into directories defined in configuration
-        foreach( $this->directories as $index => $directory )
+        foreach( $this->directories as $directory => $namespace )
         {
+            if( is_null( $namespace ) )
+            {
+                $namespace = str_replace( '/', '\\', $directory );
+            }
+
             $path   = $this->rootDir . '/../src/' . $directory;
             $finder = new Finder();
             $finder->depth( 0 )->files()->in( $path );
@@ -81,7 +83,7 @@ class SQLIAnnotationManager
             foreach( $finder as $file )
             {
                 $className      = $file->getBasename( '.php' );
-                $classNamespace = $this->namespaces[$index] . '\\' . $className;
+                $classNamespace = "$namespace\\$className";
                 // Create reflection class from generated namespace to read annotation
                 $class = new \ReflectionClass( $classNamespace );
 
