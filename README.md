@@ -34,6 +34,75 @@ _sqli_admin:
     prefix: /
 ```
 
+### Parameters
+
+Configure directories and namespaces entities to lookup :
+
+```yml
+parameters:
+    sqli_ez_platform_admin_ui_extended.entities.directories:
+        - 'Acme/AcmeBundle/Entity/Doctrine'
+    sqli_ez_platform_admin_ui_extended.entities.namespaces:
+        - 'Acme\AcmeBundle\Entity\Doctrine'
+```
+
+Annotations on entities :
+
+```php
+<?php
+namespace Acme\AcmeBundle\Entity\Doctrine;
+
+use SQLI\EzPlatformAdminUiExtendedBundle\Annotations\Annotation as SQLIAdmin;
+
+/**
+* Class MyEntity
+ * 
+ * @package Acme\AcmeBundle\Entity\Doctrine
+ * @ORM\Table(name="my_entity")
+ * @ORM\Entity(repositoryClass="Acme\AcmeBundle\Repository\Doctrine\MyEntityRepository")
+ * @SQLIAdmin\Entity(update=true,create=true,delete=false,description="Describe your entity")
+ */
+class MyEntity
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id",type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="data",type="string")
+     * @SQLIAdmin\EntityProperty(visible=false)
+     */
+    private $data;
+    
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="text",type="string")
+     * @SQLIAdmin\EntityProperty(description="Describe property of your entity")
+     */
+    private $text;
+    
+    // ...
+}
+```
+
+Class annotation `Entity` has following properties :
+- **description** Description
+- **update** Allow update of a line in table
+- **delete** Allow deletion of a line in table
+- **create** Allow creation of new line in table
+
+Property annotation `EntityProperty` has following properties :
+- **description** Description
+- **visible** Display column
+
 ### Assets
 
 Generate assets :
