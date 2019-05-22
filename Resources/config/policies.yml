@@ -3,3 +3,4 @@ sqli_admin:
     entity_show: ~
     entity_remove_element: ~
     entity_edit_element: ~
+    entity_create_element: ~

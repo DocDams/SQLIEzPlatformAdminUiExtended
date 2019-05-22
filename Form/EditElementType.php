@@ -22,7 +22,11 @@ class EditElementType extends AbstractType
         }
 
         $builder
-            ->add( 'submit', SubmitType::class );
+            ->add( 'submit', SubmitType::class,
+                   [
+                       'label' => 'form.button.label.submit',
+                       'translation_domain' => 'forms',
+                   ]);
     }
 
     public function configureOptions( OptionsResolver $resolver )

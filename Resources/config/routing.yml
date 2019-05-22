@@ -13,3 +13,7 @@ sqli_ez_platform_admin_ui_extended_entity_remove_element:
 sqli_ez_platform_admin_ui_extended_entity_edit_element:
     path: /sqli-admin/entity/{fqcn}/edit/{compound_id}
     defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:editElement }
+
+sqli_ez_platform_admin_ui_extended_entity_create_element:
+    path: /sqli-admin/entity/{fqcn}/create
+    defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:createElement }

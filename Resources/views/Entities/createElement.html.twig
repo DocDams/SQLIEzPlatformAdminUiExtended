@@ -12,15 +12,15 @@
             url: path( 'sqli_ez_platform_admin_ui_extended_entities_homepage' ) },
         { value: fqcn,
             url: path( 'sqli_ez_platform_admin_ui_extended_entity_homepage', { 'fqcn': fqcn } ) },
-        { value: 'entity.button.alt.edit'|trans },
+        { value: 'entity.button.alt.create'|trans },
     ]} %}
 {% endblock %}
 
-{% block title %}{{ 'entity.edition.page.title'|trans|desc('Entity page title') }}{% endblock %}
+{% block title %}{{ 'entity.creation.page.title'|trans|desc('Entity page title') }}{% endblock %}
 
 {% block page_title %}
     {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
-        title: 'entity.edition.page.title'|trans|desc('Entity page title'),
+        title: 'entity.creation.page.title'|trans|desc('Entity page title'),
         iconName: 'object-state'
     } %}
 {% endblock %}

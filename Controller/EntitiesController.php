@@ -156,6 +156,7 @@ class EntitiesController extends Controller
                         {
                             // Display form
                             $params['form'] = $form->createView();
+                            $params['fqcn'] = $fqcn;
 
                             return $this
                                 ->render( 'SQLIEzPlatformAdminUiExtendedBundle:Entities:editElement.html.twig',
@@ -183,6 +184,85 @@ class EntitiesController extends Controller
                 ->success( $this
                                ->get( 'translator' )
                                ->trans( 'entity.element.cannot_update', [], 'sqli_admin' ) );
+        }
+
+        // Redirect to entity homepage (list of elements)
+        return $this->redirectToRoute( 'sqli_ez_platform_admin_ui_extended_entity_homepage',
+                                       [ 'fqcn' => $fqcn ] );
+    }
+
+    /**
+     * Show edit form and save modifications
+     *
+     * @param string  $fqcn FQCN
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \ReflectionException
+     */
+    public function createElementAction( $fqcn, Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ez:sqli_admin:entity_edit_element' );
+
+        $updateSuccessfull = false;
+
+        // Check if class annotation allow modification
+        $entity = $this->get( 'sqli_admin_entities' )->getEntity( $fqcn, false );
+
+        if( array_key_exists( 'class', $entity ) && array_key_exists( 'annotation', $entity['class'] ) )
+        {
+            $entityAnnotation = $entity['class']['annotation'];
+            // Check if annotation exists
+            if( $entityAnnotation instanceof Entity )
+            {
+                // Check if modification is allowed
+                if( $entityAnnotation->isUpdate() )
+                {
+                    // New element
+                    $element = new $fqcn();
+
+                    // Build form according to element and entity informations
+                    $form = $this->createForm( EditElementType::class, $element, [ 'entity' => $entity ] );
+                    $form->handleRequest( $request );
+
+                    if( $form->isSubmitted() && $form->isValid() )
+                    {
+                        // Form is valid, update element
+                        $this->get( 'doctrine.orm.entity_manager' )->persist( $element );
+                        $this->get( 'doctrine.orm.entity_manager' )->flush();
+
+                        $updateSuccessfull = true;
+                    }
+                    else
+                    {
+                        // Display form
+                        $params['form'] = $form->createView();
+                        $params['fqcn'] = $fqcn;
+
+                        return $this
+                            ->render( 'SQLIEzPlatformAdminUiExtendedBundle:Entities:createElement.html.twig',
+                                      $params );
+                    }
+                }
+            }
+        }
+
+        if( $updateSuccessfull )
+        {
+            // Display success notification
+            $this
+                ->get( 'EzSystems\EzPlatformAdminUi\Notification\FlashBagNotificationHandler' )
+                ->success( $this
+                               ->get( 'translator' )
+                               ->trans( 'entity.element.created', [], 'sqli_admin' ) );
+        }
+        else
+        {
+            // Display error notification
+            $this
+                ->get( 'EzSystems\EzPlatformAdminUi\Notification\FlashBagNotificationHandler' )
+                ->success( $this
+                               ->get( 'translator' )
+                               ->trans( 'entity.element.cannot_create', [], 'sqli_admin' ) );
         }
 
         // Redirect to entity homepage (list of elements)
