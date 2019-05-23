@@ -35,7 +35,14 @@
         {% block right_sidebar_wrapper %}
             <div class="col-sm-1 pt-4 px-0 bg-secondary ez-context-menu">
                 <div class="ez-sticky-container">
-                    {% block right_sidebar %}{% endblock %}
+                    {% set content_type_edit_sidebar_right = knp_menu_get('sqli_ezplatform_admin_ui.menu.edit_element.sidebar_right',
+                        [],
+                        {
+                            'save_button_name': form.children.submit.vars.id,
+                            'cancel_url': path( 'sqli_ez_platform_admin_ui_extended_entity_homepage', { 'fqcn': fqcn } )
+                        }
+                        ) %}
+                    {{ knp_menu_render(content_type_edit_sidebar_right, {'template': '@ezdesign/parts/menu/sidebar_right.html.twig'}) }}
                 </div>
             </div>
         {% endblock %}

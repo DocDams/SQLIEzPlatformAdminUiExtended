@@ -21,3 +21,7 @@ entity.element.created: "Elément créé"
 entity.element.cannot_delete: "Suppression impossible"
 entity.element.cannot_update: "Modification impossible"
 entity.element.cannot_create: "Création impossible"
+
+# Right Sidebar
+edit_element__sidebar_right__save: "Enregistrer"
+edit_element__sidebar_right__cancel: "Annuler"

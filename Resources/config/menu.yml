@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    SQLI\EzPlatformAdminUiExtendedBundle\Menu\MenuListener:
+        tags:
+            - { name: kernel.event_subscriber }
+
+    SQLI\EzPlatformAdminUiExtendedBundle\Menu\EditElementRightSidebarBuilder:
+        tags:
+            - { name: knp_menu.menu_builder, method: build, alias: sqli_ezplatform_admin_ui.menu.edit_element.sidebar_right }
