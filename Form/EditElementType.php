@@ -15,9 +15,16 @@ class EditElementType extends AbstractType
 
         foreach( $element['class']['properties'] as $propertyName => $propertyInfos )
         {
+            // If property can be visible, add it to formbuilder
             if( $propertyInfos['visible'] )
             {
-                $builder->add( $propertyName );
+                $params = [];
+                if( $propertyInfos['readonly'] )
+                {
+                    // Readonly attribute for this attribute
+                    $params = [ 'attr' => [ 'readonly' => true ] ];
+                }
+                $builder->add( $propertyName, null, $params );
             }
         }
 

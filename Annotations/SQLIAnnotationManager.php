@@ -123,6 +123,7 @@ class SQLIAnnotationManager
 
                     // Try to get an SQLIPropertyAnnotation
                     $visible            = true;
+                    $readonly           = false;
                     $propertyAnnotation = $this
                         ->annotationReader
                         ->getPropertyAnnotation( $reflectionProperty, SQLIPropertyAnnotation::class );
@@ -132,9 +133,15 @@ class SQLIAnnotationManager
                     {
                         $visible = false;
                     }
+                    // Check if property must be only in readonly
+                    if( $propertyAnnotation instanceof EntityProperty && $propertyAnnotation->isReadonly() )
+                    {
+                        $readonly = true;
+                    }
                     $properties[$reflectionProperty->getName()] = [
                         'accessibility' => $accessibility,
-                        'visible'       => $visible
+                        'visible'       => $visible,
+                        'readonly'      => $readonly,
                     ];
 
                     // Build primary key from Doctrine\Id annotation

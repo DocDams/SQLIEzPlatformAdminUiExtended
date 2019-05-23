@@ -14,6 +14,8 @@ final class EntityProperty implements SQLIPropertyAnnotation
 {
     /** @var bool */
     public $visible = true;
+    /** @var bool */
+    public $readonly = false;
     /** @var string */
     public $description = "";
 
@@ -23,6 +25,14 @@ final class EntityProperty implements SQLIPropertyAnnotation
     public function isVisible(): bool
     {
         return $this->visible;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReadonly(): bool
+    {
+        return $this->readonly;
     }
 
     /**
