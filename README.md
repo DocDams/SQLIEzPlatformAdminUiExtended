@@ -101,6 +101,20 @@ class MyEntity
     private $text;
     
     // ...
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    public function getData() : ?string
+    {
+        return $this->data;
+    }
+    
+    public function getText() : string 
+    {
+        return $this->text ?: '';
+    }
 }
 ```
 
@@ -114,3 +128,5 @@ Property annotation `EntityProperty` has following properties :
 - **description** Description
 - **visible** Display column
 - **readonly** Disallow modifications in edit form
+
+**NOTE** : Be careful if you choose to specify the return type on getters : in creation mode, getters will return 'null' so please provide a default value or nullable in type of return (see getter in above class example)

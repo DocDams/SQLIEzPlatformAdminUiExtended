@@ -53,9 +53,6 @@ class EditElementRightSidebarBuilder extends AbstractBuilder implements Translat
                                     self::ITEM__CANCEL,
                                     [
                                         'uri' => $options['cancel_url'],
-                                        'attributes' => [
-                                            'class'      => 'btn--trigger',
-                                        ],
                                         'extras'     => [ 'icon' => 'circle-close' ],
                                     ]
                                 ),
