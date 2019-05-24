@@ -1,7 +1,11 @@
-# SQLI eZPlatform Admin UI Extended Bundle
+SQLI eZPlatform Admin UI Extended Bundle
+========================================
+
 [SQLI](http://www.sqli.com) eZPlatform AdminUI Extended is a bundle that add a new tab in admin top bar and allow to display and CRUD entities
 
-## Installation
+Installation
+------------
+
 ### Install with composer
 ```
 composer require sqli/ezplatform_adminui_extended:dev-master
@@ -34,7 +38,15 @@ _sqli_admin:
     prefix: /
 ```
 
-### Parameters
+### Assets
+
+Generate assets :
+```bash
+php bin/console assetic:dump
+php bin/console cache:clear
+```
+
+### Parameters
 
 Configure directories and namespaces entities to lookup :
 
@@ -43,6 +55,7 @@ parameters:
     sqli_ez_platform_admin_ui_extended.entities.directories:
         Acme/AcmeBundle/Entity/Doctrine: ~
 ```
+Use "~" if the namespace of your classes observ PSR-0 rules or specify directory which contains them.
 
 Annotations on entities :
 
@@ -83,7 +96,7 @@ class MyEntity
      * @var string
      * 
      * @ORM\Column(name="text",type="string")
-     * @SQLIAdmin\EntityProperty(description="Describe property of your entity")
+     * @SQLIAdmin\EntityProperty(description="Describe property of your entity",readonly=true)
      */
     private $text;
     
@@ -100,11 +113,4 @@ Class annotation `Entity` has following properties :
 Property annotation `EntityProperty` has following properties :
 - **description** Description
 - **visible** Display column
-
-### Assets
-
-Generate assets :
-```bash
-php bin/console assetic:dump
-php bin/console cache:clear
-```
+- **readonly** Disallow modifications in edit form
