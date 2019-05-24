@@ -68,8 +68,10 @@ class SQLIAnnotationManager
         $annotatedClasses = [];
 
         // Scan all files into directories defined in configuration
-        foreach( $this->directories as $directory => $namespace )
+        foreach( $this->directories as $entitiesMapping )
         {
+            $directory = $entitiesMapping['directory'];
+            $namespace = $entitiesMapping['namespace'];
             if( is_null( $namespace ) )
             {
                 $namespace = str_replace( '/', '\\', $directory );

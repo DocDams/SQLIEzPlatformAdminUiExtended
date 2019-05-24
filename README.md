@@ -48,12 +48,13 @@ php bin/console cache:clear
 
 ### Parameters
 
-Configure directories and namespaces entities to lookup :
+Configure directories (and namespaces if not according to PSR-0 rules) entities to lookup :
 
 ```yml
-parameters:
-    sqli_ez_platform_admin_ui_extended.entities.directories:
-        Acme/AcmeBundle/Entity/Doctrine: ~
+sqli_ez_platform_admin_ui_extended:
+    entities:
+        - { directory: 'Acme/AcmeBundle/Entity/Doctrine' }
+        - { directory: 'Acme/AcmeBundle2/Entity/Doctrine', namespace: 'Acme\AcmeBundle2NoPSR0\ORM\Doctrine' }
 ```
 Use "~" if the namespace of your classes observ PSR-0 rules or specify directory which contains them.
 
