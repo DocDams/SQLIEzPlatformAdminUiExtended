@@ -22,7 +22,7 @@ class EditElementType extends AbstractType
                 if( $propertyInfos['readonly'] )
                 {
                     // Readonly attribute for this attribute
-                    $params = [ 'attr' => [ 'readonly' => true ] ];
+                    $params = [ 'attr' => [ 'readonly' => true, 'class' => 'bg-transparent' ] ];
                 }
                 $builder->add( $propertyName, null, $params );
             }
