@@ -22,8 +22,20 @@ class EditElementType extends AbstractType
                 if( $propertyInfos['readonly'] )
                 {
                     // Readonly attribute for this attribute
-                    $params = [ 'attr' => [ 'readonly' => true, 'class' => 'bg-transparent' ] ];
+                    $params['attr']['readonly'] = true;
+                    $params['attr']['class'] = 'bg-transparent';
                 }
+                // Is a required field ?
+                $params['required'] = $propertyInfos['required'];
+                // Add attribute step=any if it's a float field
+                switch( $propertyInfos['type'] )
+                {
+                    case "decimal":
+                    case "float":
+                        $params['attr']['step'] = 'any';
+                        break;
+                }
+
                 $builder->add( $propertyName, null, $params );
             }
         }

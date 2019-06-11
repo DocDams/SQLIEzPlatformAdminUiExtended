@@ -3,6 +3,7 @@
 namespace SQLI\EzPlatformAdminUiExtendedBundle\Annotations;
 
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Id;
 use SQLI\EzPlatformAdminUiExtendedBundle\Annotations\Annotation\EntityProperty;
@@ -126,6 +127,8 @@ class SQLIAnnotationManager
                     // Try to get an SQLIPropertyAnnotation
                     $visible            = true;
                     $readonly           = false;
+                    $required           = true;
+                    $columnType         = "string";
                     $propertyAnnotation = $this
                         ->annotationReader
                         ->getPropertyAnnotation( $reflectionProperty, SQLIPropertyAnnotation::class );
@@ -140,10 +143,22 @@ class SQLIAnnotationManager
                     {
                         $readonly = true;
                     }
+                    // Check if nullable is sets to true
+                    $nullablePropertyAnnotation = $this
+                        ->annotationReader
+                        ->getPropertyAnnotation( $reflectionProperty, Column::class );
+                    if( $nullablePropertyAnnotation )
+                    {
+                        $required   = !boolval( $nullablePropertyAnnotation->nullable );
+                        $columnType = $nullablePropertyAnnotation->type;
+                    }
+
                     $properties[$reflectionProperty->getName()] = [
                         'accessibility' => $accessibility,
                         'visible'       => $visible,
                         'readonly'      => $readonly,
+                        'required'      => $required,
+                        'type'          => $columnType,
                     ];
 
                     // Build primary key from Doctrine\Id annotation

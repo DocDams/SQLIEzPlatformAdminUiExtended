@@ -1,7 +1,6 @@
-{% extends 'EzPlatformAdminUiBundle::layout.html.twig' %}
+{% extends viewbaseLayout is defined ? viewbaseLayout : '@ezdesign/layout.html.twig' %}
 
-{% set default_form_templates = admin_ui_config.contentEditFormTemplates %}
-{% form_theme form with default_form_templates only %}
+{% form_theme form with '@SQLIEzPlatformAdminUiExtended/form_fields.html.twig' only %}
 
 {% trans_default_domain 'sqli_admin' %}
 
@@ -30,6 +29,11 @@
         {% block left_sidebar %}{% endblock left_sidebar %}
         <div class="container px-0 pb-4 mt-3 ez-content-edit-container">
             {{ form_start(form, {'attr': {'class': 'ez-form-validate'}}) }}
+
+            {% for field in form.children if not field.rendered %}
+                {{ form_row(field) }}
+            {% endfor %}
+
             {{ form_end(form) }}
         </div>
         {% block right_sidebar_wrapper %}
