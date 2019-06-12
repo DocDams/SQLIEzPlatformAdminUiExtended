@@ -21,3 +21,8 @@
         </div>
     </div>
 {%- endblock %}
+
+{%- block number_widget -%}
+    {%- set value = data -%}
+    {{ parent() }}
+{%- endblock number_widget -%}
