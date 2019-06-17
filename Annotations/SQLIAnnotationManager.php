@@ -129,20 +129,22 @@ class SQLIAnnotationManager
                     $readonly           = false;
                     $required           = true;
                     $columnType         = "string";
+                    $description        = null;
+
                     $propertyAnnotation = $this
                         ->annotationReader
                         ->getPropertyAnnotation( $reflectionProperty, SQLIPropertyAnnotation::class );
 
-                    // Check if a visibility information defined on entity's property thanks to 'visible' annotation
-                    if( $propertyAnnotation instanceof EntityProperty && !$propertyAnnotation->isVisible() )
+                    if( $propertyAnnotation instanceof EntityProperty )
                     {
-                        $visible = false;
+                        // Check if a visibility information defined on entity's property thanks to 'visible' annotation
+                        $visible = $propertyAnnotation->isVisible();
+                        // Check if property must be only in readonly
+                        $readonly = $propertyAnnotation->isReadonly();
+                        // Get property description
+                        $description = $propertyAnnotation->getDescription();
                     }
-                    // Check if property must be only in readonly
-                    if( $propertyAnnotation instanceof EntityProperty && $propertyAnnotation->isReadonly() )
-                    {
-                        $readonly = true;
-                    }
+
                     // Check if nullable is sets to true
                     $nullablePropertyAnnotation = $this
                         ->annotationReader
@@ -159,6 +161,7 @@ class SQLIAnnotationManager
                         'readonly'      => $readonly,
                         'required'      => $required,
                         'type'          => $columnType,
+                        'description'   => $description,
                     ];
 
                     // Build primary key from Doctrine\Id annotation

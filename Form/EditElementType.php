@@ -18,15 +18,19 @@ class EditElementType extends AbstractType
             // If property can be visible, add it to formbuilder
             if( $propertyInfos['visible'] )
             {
+                // FormType parameters
                 $params = [];
+
                 if( $propertyInfos['readonly'] )
                 {
                     // Readonly attribute for this attribute
                     $params['attr']['readonly'] = true;
                     $params['attr']['class'] = 'bg-transparent';
                 }
+
                 // Is a required field ?
                 $params['required'] = $propertyInfos['required'];
+
                 // Add attribute step=any if it's a float field
                 switch( $propertyInfos['type'] )
                 {
@@ -36,10 +40,18 @@ class EditElementType extends AbstractType
                         break;
                 }
 
+                // If a description defined for property, add it in 'title' attribute of field
+                if( !empty( $propertyInfos ) )
+                {
+                    $params['attr']['title'] = $propertyInfos['description'];
+                }
+
+                // Add field on Form
                 $builder->add( $propertyName, null, $params );
             }
         }
 
+        // Add submit button
         $builder
             ->add( 'submit', SubmitType::class,
                    [
