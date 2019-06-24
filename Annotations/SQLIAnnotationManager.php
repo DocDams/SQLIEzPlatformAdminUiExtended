@@ -151,8 +151,8 @@ class SQLIAnnotationManager
                         ->getPropertyAnnotation( $reflectionProperty, Column::class );
                     if( $nullablePropertyAnnotation )
                     {
-                        $required   = !boolval( $nullablePropertyAnnotation->nullable );
                         $columnType = $nullablePropertyAnnotation->type;
+                        $required = $columnType == "boolean" ? false : !boolval( $nullablePropertyAnnotation->nullable );
                     }
 
                     $properties[$reflectionProperty->getName()] = [
