@@ -155,5 +155,7 @@ List of supported Doctrine types :
 - boolean
 - date
 - datetime
+- array (Using [serialization](https://www.php.net/manual/en/language.oop5.serialization.php))
+- object (Using [serialization](https://www.php.net/manual/en/language.oop5.serialization.php))
 
 **NOTICE** : Be careful if you choose to specify the return type on getters : in creation mode, getters will return 'null' so please provide a default value or nullable in type of return (see getter in above class example)
