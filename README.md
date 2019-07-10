@@ -101,6 +101,13 @@ class MyEntity
      */
     private $text;
     
+    /**
+     * @var string
+     * @ORM\Column(name="select",type="int")
+     * @SQLIAdmin\EntityProperty(choices={"First choice": 1, "Second choice": 2})
+     */
+    private $select;
+    
     // ...
     public function getId()
     {
@@ -116,6 +123,11 @@ class MyEntity
     {
         return $this->text ?: '';
     }
+    
+    public function getSelect() : int
+    {
+        return $this->select;
+    }
 }
 ```
 
@@ -129,6 +141,7 @@ Property annotation `EntityProperty` has following properties :
 - **description** Description
 - **visible** Display column
 - **readonly** Disallow modifications in edit form
+- **choices** An hash relayed to [ChoiceType](https://symfony.com/doc/current/reference/forms/types/choice.html#choices) 
 
 
 ### Supported types

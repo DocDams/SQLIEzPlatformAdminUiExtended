@@ -3,6 +3,7 @@
 namespace SQLI\EzPlatformAdminUiExtendedBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,7 +26,7 @@ class EditElementType extends AbstractType
                 {
                     // Readonly attribute for this attribute
                     $params['attr']['readonly'] = true;
-                    $params['attr']['class'] = 'bg-transparent';
+                    $params['attr']['class']    = 'bg-transparent';
                 }
 
                 // Is a required field ?
@@ -46,8 +47,15 @@ class EditElementType extends AbstractType
                     $params['attr']['title'] = $propertyInfos['description'];
                 }
 
+                $formType = null;
+                if( is_array( $propertyInfos['choices'] ) && !empty( $propertyInfos['choices'] ) )
+                {
+                    $formType          = ChoiceType::class;
+                    $params['choices'] = $propertyInfos['choices'];
+                }
+
                 // Add field on Form
-                $builder->add( $propertyName, null, $params );
+                $builder->add( $propertyName, $formType, $params );
             }
         }
 

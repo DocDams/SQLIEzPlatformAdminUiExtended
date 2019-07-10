@@ -130,6 +130,7 @@ class SQLIAnnotationManager
                     $required           = true;
                     $columnType         = "string";
                     $description        = null;
+                    $choices            = null;
 
                     $propertyAnnotation = $this
                         ->annotationReader
@@ -143,6 +144,8 @@ class SQLIAnnotationManager
                         $readonly = $propertyAnnotation->isReadonly();
                         // Get property description
                         $description = $propertyAnnotation->getDescription();
+                        // Get choices
+                        $choices = $propertyAnnotation->getChoices();
                     }
 
                     // Check if nullable is sets to true
@@ -162,6 +165,7 @@ class SQLIAnnotationManager
                         'required'      => $required,
                         'type'          => $columnType,
                         'description'   => $description,
+                        'choices'       => $choices,
                     ];
 
                     // Build primary key from Doctrine\Id annotation

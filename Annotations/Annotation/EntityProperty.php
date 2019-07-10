@@ -18,6 +18,8 @@ final class EntityProperty implements SQLIPropertyAnnotation
     public $readonly = false;
     /** @var string */
     public $description = "";
+    /** @var array */
+    public $choices = null;
 
     /**
      * @return bool
@@ -41,5 +43,13 @@ final class EntityProperty implements SQLIPropertyAnnotation
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getChoices()
+    {
+        return $this->choices;
     }
 }
