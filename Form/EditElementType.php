@@ -3,8 +3,10 @@
 namespace SQLI\EzPlatformAdminUiExtendedBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -42,7 +44,7 @@ class EditElementType extends AbstractType
                 }
 
                 // If a description defined for property, add it in 'title' attribute of field
-                if( !empty( $propertyInfos ) )
+                if( !empty( $propertyInfos['description'] ) )
                 {
                     $params['attr']['title'] = $propertyInfos['description'];
                 }
@@ -53,9 +55,28 @@ class EditElementType extends AbstractType
                     $formType          = ChoiceType::class;
                     $params['choices'] = $propertyInfos['choices'];
                 }
+                elseif( $propertyInfos['type'] === "object" || $propertyInfos['type'] === "array" )
+                {
+                    $formType = TextareaType::class;
+                }
 
                 // Add field on Form
                 $builder->add( $propertyName, $formType, $params );
+
+                // Support display of objects and arrays : serialize them before display
+                if( $propertyInfos['type'] === "object" || $propertyInfos['type'] === "array" )
+                {
+                    $builder->get( $propertyName )->addViewTransformer( new CallbackTransformer(
+                                                                            function( $toSerialize )
+                                                                            {
+                                                                                return serialize( $toSerialize );
+                                                                            },
+                                                                            function( $toUnserialize )
+                                                                            {
+                                                                                return unserialize( $toUnserialize );
+                                                                            }
+                                                                        ) );
+                }
             }
         }
 
