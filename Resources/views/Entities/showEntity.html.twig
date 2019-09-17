@@ -74,10 +74,8 @@
                     <td><a href="{{ path( '_ez_content_view', { 'contentId': value } ) }}">{{ value }}</a></td>
                 {% elseif property_infos.extra_link == "location" %}
                     <td><a href="{{ path( '_ezpublishLocation', { 'locationId': value } ) }}">{{ value }}</a></td>
-                {% elseif property_infos.extra_link == "tag" %}
-                    {% if bundle_exists( 'netgen_tags_bundle' ) %}
-                        <td><a href="{{ path('NetgenTagsBundle', { 'tagId': value }) }}">{{ value }}</a></td>
-                    {% endif %}
+                {% elseif property_infos.extra_link == "tag" and bundle_exists( 'NetgenTagsBundle' ) %}
+                    <td><a href="{{ path('netgen_tags_admin_tag_show', { 'tagId': value }) }}">{{ value }}</a></td>
                 {% else %}
                     {# ... else, just display the value #}
                     <td>{{ value }}</td>
