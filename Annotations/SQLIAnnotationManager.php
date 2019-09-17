@@ -131,6 +131,7 @@ class SQLIAnnotationManager
                     $columnType         = "string";
                     $description        = null;
                     $choices            = null;
+                    $extraLink          = null;
 
                     $propertyAnnotation = $this
                         ->annotationReader
@@ -146,6 +147,7 @@ class SQLIAnnotationManager
                         $description = $propertyAnnotation->getDescription();
                         // Get choices
                         $choices = $propertyAnnotation->getChoices();
+                        $extraLink = $propertyAnnotation->getExtraLink();
                     }
 
                     // Check if nullable is sets to true
@@ -166,6 +168,7 @@ class SQLIAnnotationManager
                         'type'          => $columnType,
                         'description'   => $description,
                         'choices'       => $choices,
+                        'extra_link'    => $extraLink,
                     ];
 
                     // Build primary key from Doctrine\Id annotation

@@ -68,7 +68,20 @@
     <tr>
         {% for property_name, property_infos in class.properties %}
             {% if property_infos.visible is same as(true) %}
-                <td>{{ sqli_admin_attribute( element, property_name ) }}</td>
+                {% set value = sqli_admin_attribute( element, property_name ) %}
+                {# If column flagged as extra link then column's value will be used as ID ... #}
+                {% if property_infos.extra_link == "content" %}
+                    <td><a href="{{ path( '_ez_content_view', { 'contentId': value } ) }}">{{ value }}</a></td>
+                {% elseif property_infos.extra_link == "location" %}
+                    <td><a href="{{ path( '_ezpublishLocation', { 'locationId': value } ) }}">{{ value }}</a></td>
+                {% elseif property_infos.extra_link == "tag" %}
+                    {% if bundle_exists( 'netgen_tags_bundle' ) %}
+                        <td><a href="{{ path('NetgenTagsBundle', { 'tagId': value }) }}">{{ value }}</a></td>
+                    {% endif %}
+                {% else %}
+                    {# ... else, just display the value #}
+                    <td>{{ value }}</td>
+                {% endif %}
             {% endif %}
         {% endfor %}
         <td>

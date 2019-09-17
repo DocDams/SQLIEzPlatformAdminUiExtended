@@ -20,6 +20,11 @@ final class EntityProperty implements SQLIPropertyAnnotation
     public $description = "";
     /** @var array */
     public $choices = null;
+    /**
+     * @var string
+     * @Enum({"content", "location", "tag"})
+     */
+    public $extra_link = null;
 
     /**
      * @return bool
@@ -51,5 +56,13 @@ final class EntityProperty implements SQLIPropertyAnnotation
     public function getChoices()
     {
         return $this->choices;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtraLink()
+    {
+        return $this->extra_link;
     }
 }

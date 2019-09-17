@@ -108,6 +108,13 @@ class MyEntity
      */
     private $select;
     
+    /**
+     * @var integer
+     * @ORM\Column(name="content_id",type="int")
+     * @SQLIAdmin\EntityProperty(extra_link="location") 
+    */
+    private $contentID;
+    
     // ...
     public function getId()
     {
@@ -128,6 +135,11 @@ class MyEntity
     {
         return $this->select;
     }
+    
+    public function getContentID(): int
+    {
+        return $this->contentID;
+    }
 }
 ```
 
@@ -141,7 +153,8 @@ Property annotation `EntityProperty` has following properties :
 - **description** Description
 - **visible** Display column
 - **readonly** Disallow modifications in edit form
-- **choices** An hash relayed to [ChoiceType](https://symfony.com/doc/current/reference/forms/types/choice.html#choices) 
+- **choices** An hash relayed to [ChoiceType](https://symfony.com/doc/current/reference/forms/types/choice.html#choices)
+- **extra_link** Use value as contentID or locationID or tagID (required [Netgen/TagsBundle](https://packagist.org/packages/netgen/tagsbundle)) to create a link in eZPlatform Back-Office
 
 
 ### Supported types

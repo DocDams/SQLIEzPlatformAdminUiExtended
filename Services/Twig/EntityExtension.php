@@ -2,15 +2,30 @@
 
 namespace SQLI\EzPlatformAdminUiExtendedBundle\Services\Twig;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 class EntityExtension extends \Twig_Extension
 {
+    protected $container;
+
+    public function __construct( ContainerInterface $container )
+    {
+        $this->container = $container;
+    }
+
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction( 'sqli_admin_attribute', [
-                $this,
-                'attributeValue'
-            ], array( 'is_safe' => [ 'all' ] ) ),
+            new \Twig_SimpleFunction( 'sqli_admin_attribute',
+                                      [
+                                          $this,
+                                          'attributeValue'
+                                      ], array( 'is_safe' => [ 'all' ] ) ),
+            new \Twig_SimpleFunction( 'bundle_exists',
+                                      [
+                                          $this,
+                                          'bundleExists'
+                                      ] ),
         ];
     }
 
@@ -40,5 +55,16 @@ class EntityExtension extends \Twig_Extension
             // If property instance of an object which not implements a __toString method it will display an error
             return "<span title='{$exception->getMessage()}' class='alert alert-danger'>ERROR</span>";
         }
+    }
+
+    /**
+     * Check if a bundle is declared
+     *
+     * @param $bundleName
+     * @return bool
+     */
+    public function bundleExists( $bundleName )
+    {
+        return array_key_exists( $bundleName, $this->container->getParameter( 'kernel.bundles' ) );
     }
 }
