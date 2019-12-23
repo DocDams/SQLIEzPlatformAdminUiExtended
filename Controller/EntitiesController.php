@@ -33,22 +33,25 @@ class EntitiesController extends Controller
     /**
      * Display an entity (lines in SQL table)
      *
-     * @param $fqcn
+     * @param string  $fqcn
+     * @param string  $sort_column
+     * @param string  $sort_order
+     * @param Request $request
      * @return Response
      * @throws ReflectionException
      */
-    public function showEntityAction( $fqcn, Request $request )
+    public function showEntityAction( $fqcn, $sort_column, $sort_order, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ez:sqli_admin:entity_show' );
 
         // Entity informations and all elements
-        $params = $this->get( 'sqli_admin_entities' )->getEntity( $fqcn );
+        $params = $this->get( 'sqli_admin_entities' )->getEntity( $fqcn, true, $sort_column, $sort_order );
 
         // Change current page on PagerFanta
         /** @var Entity $classAnnotation */
         $classAnnotation = $params['class']['annotation'];
         // Create a pager from array of elements
-        $pager           = new Pagerfanta( new ArrayAdapter( $params['elements'] ) );
+        $pager = new Pagerfanta( new ArrayAdapter( $params['elements'] ) );
         // Define max elements per page (can be defined in class' annotation)
         $pager->setMaxPerPage( $classAnnotation->getMaxPerPage() );
         // Define current page
@@ -341,7 +344,7 @@ class EntitiesController extends Controller
 
                         // Close buffer
                         fclose( $resource );
-                    });
+                    } );
                 }
             }
         }

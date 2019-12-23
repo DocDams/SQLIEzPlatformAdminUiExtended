@@ -54,12 +54,14 @@ class EntityHelper
     /**
      * Get an entity with her information and elements
      *
-     * @param string $fqcn
-     * @param bool   $fetchElements
+     * @param string      $fqcn
+     * @param bool        $fetchElements
+     * @param bool|string $sort_column Column name to sort results
+     * @param bool|string $sort_order ASC|DESC
      * @return mixed
      * @throws \ReflectionException
      */
-    public function getEntity( $fqcn, $fetchElements = true )
+    public function getEntity( $fqcn, $fetchElements = true, $sort_column = false, $sort_order = false )
     {
         $annotatedClass['fqcn']  = $fqcn;
         $annotatedClass['class'] = $this->getAnnotatedClass( $fqcn );
@@ -77,7 +79,7 @@ class EntityHelper
             }
 
             // Get all elements
-            $annotatedClass['elements'] = $this->findAll( $fqcn, $filteredColums );
+            $annotatedClass['elements'] = $this->findAll( $fqcn, $filteredColums, $sort_column, $sort_order );
         }
 
         return $annotatedClass;
@@ -86,11 +88,13 @@ class EntityHelper
     /**
      * Retrieve all lines in SQL table
      *
-     * @param string     $entityClass FQCN
-     * @param array|null $filteredColums
+     * @param string      $entityClass FQCN
+     * @param array|null  $filteredColums
+     * @param bool|string $sort_column Column name to sort results
+     * @param bool|string $sort_order ASC|DESC
      * @return array
      */
-    public function findAll( $entityClass, $filteredColums = null )
+    public function findAll( $entityClass, $filteredColums = null, $sort_column = false, $sort_order = false )
     {
         /** @var $repository EntityRepository */
         $repository   = $this->entityManager->getRepository( $entityClass );
@@ -107,6 +111,11 @@ class EntityHelper
 
             // Change SELECT clause
             $queryBuilder->select( $select );
+        }
+
+        if( $sort_column !== false )
+        {
+            $queryBuilder->orderBy( "entity.$sort_column", ( $sort_order == "ASC" ? "ASC" : "DESC" ) );
         }
 
         // Return results as array (ignore accessibility of properties)

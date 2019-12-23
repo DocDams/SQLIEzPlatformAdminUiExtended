@@ -3,8 +3,11 @@ sqli_ez_platform_admin_ui_extended_entities_homepage:
     defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:listAllEntities }
 
 sqli_ez_platform_admin_ui_extended_entity_homepage:
-    path: /sqli-admin/entity/{fqcn}
-    defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:showEntity }
+    path: /sqli-admin/entity/{fqcn}/{sort_column}/{sort_order}
+    controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:showEntity
+    defaults:
+        sort_column: 'id'
+        sort_order: 'ASC'
 
 sqli_ez_platform_admin_ui_extended_entity_remove_element:
     path: /sqli-admin/entity/{fqcn}/remove/{compound_id}

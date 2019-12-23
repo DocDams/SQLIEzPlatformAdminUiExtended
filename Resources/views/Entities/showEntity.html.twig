@@ -39,7 +39,35 @@
                 <tr>
                     {% for property_name, property_infos in class.properties %}
                         {% if property_infos.visible is same as(true) %}
-                            <th><span title="{{ property_infos.accessibility }}">{{ property_name }}</span></th>
+                            <th>
+                                <span title="{{ property_infos.accessibility }}" class="d-inline-flex">
+                                    {# Sort ASC #}
+                                    <a href="{{ path('sqli_ez_platform_admin_ui_extended_entity_homepage',
+                                        {
+                                            'fqcn': fqcn,
+                                            'sort_column': property_name,
+                                            'sort_order': 'ASC'
+                                        }) }}">
+                                        <svg class="ez-icon ez-icon-caret-up" style="width: 1.5rem;height: 1.5rem;">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                 xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#caret-up"></use>
+                                        </svg>
+                                    </a>
+                                    {{ property_name }}
+                                    {# Sort DESC #}
+                                    <a href="{{ path('sqli_ez_platform_admin_ui_extended_entity_homepage',
+                                        {
+                                            'fqcn': fqcn,
+                                            'sort_column': property_name,
+                                            'sort_order': 'DESC'
+                                        }) }}">
+                                        <svg class="ez-icon ez-icon-caret-down" style="width: 1.5rem;height: 1.5rem;">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                 xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#caret-down"></use>
+                                        </svg>
+                                    </a>
+                                </span>
+                            </th>
                         {% endif %}
                     {% endfor %}
                     <th>
