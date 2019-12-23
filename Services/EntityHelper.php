@@ -4,6 +4,9 @@ namespace SQLI\EzPlatformAdminUiExtendedBundle\Services;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
+use SQLI\EzPlatformAdminUiExtendedBundle\Annotations\Annotation\Entity;
 use SQLI\EzPlatformAdminUiExtendedBundle\Annotations\SQLIAnnotationManager;
 
 class EntityHelper
@@ -77,7 +80,12 @@ class EntityHelper
         if( $fetchElements )
         {
             // Get all elements
-            $annotatedClass['elements'] = $this->findAll( $fqcn, $filteredColums );
+            /** @var Entity $classAnnotation */
+            $classAnnotation = $annotatedClass['class']['annotation'];
+            $pager           = new Pagerfanta( new ArrayAdapter( $this->findAll( $fqcn, $filteredColums ) ) );
+            $pager->setMaxPerPage( $classAnnotation->getMaxPerPage() );
+
+            $annotatedClass['elements'] = $pager;
         }
 
         return $annotatedClass;

@@ -2,18 +2,21 @@
 
 namespace SQLI\EzPlatformAdminUiExtendedBundle\Controller;
 
+use ReflectionException;
 use SQLI\EzPlatformAdminUiExtendedBundle\Annotations\Annotation\Entity;
 use SQLI\EzPlatformAdminUiExtendedBundle\Form\EditElementType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class EntitiesController extends Controller
 {
     /**
      * Display all entities annotated with SQLIAdmin\Entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \ReflectionException
+     * @return Response
+     * @throws ReflectionException
      */
     public function listAllEntitiesAction()
     {
@@ -28,15 +31,17 @@ class EntitiesController extends Controller
      * Display an entity (lines in SQL table)
      *
      * @param $fqcn
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \ReflectionException
+     * @return Response
+     * @throws ReflectionException
      */
-    public function showEntityAction( $fqcn )
+    public function showEntityAction( $fqcn, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ez:sqli_admin:entity_show' );
 
         // Entity informations and all elements
         $params = $this->get( 'sqli_admin_entities' )->getEntity( $fqcn );
+        // Change current page on PagerFanta
+        $params['elements']->setCurrentPage( $request->get( 'page', 1 ) );
 
         return $this->render( 'SQLIEzPlatformAdminUiExtendedBundle:Entities:showEntity.html.twig', $params );
     }
@@ -46,8 +51,8 @@ class EntitiesController extends Controller
      *
      * @param $fqcn
      * @param $compound_id string Compound primary key in JSON string
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \ReflectionException
+     * @return Response
+     * @throws ReflectionException
      */
     public function removeElementAction( $fqcn, $compound_id )
     {
@@ -110,8 +115,8 @@ class EntitiesController extends Controller
      * @param string  $fqcn FQCN
      * @param string  $compound_id Json format
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @throws \ReflectionException
+     * @return RedirectResponse|Response
+     * @throws ReflectionException
      */
     public function editElementAction( $fqcn, $compound_id, Request $request )
     {
@@ -196,8 +201,8 @@ class EntitiesController extends Controller
      *
      * @param string  $fqcn FQCN
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @throws \ReflectionException
+     * @return RedirectResponse|Response
+     * @throws ReflectionException
      */
     public function createElementAction( $fqcn, Request $request )
     {

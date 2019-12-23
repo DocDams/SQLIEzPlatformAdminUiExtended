@@ -47,13 +47,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for element in elements %}
+                {% for element in elements.currentPageResults %}
                     {{ block( 'sqli_entity_element' ) }}
                 {% endfor %}
                 </tbody>
             </table>
         {% endif %}
-        {#{{ pagerfanta(articles, 'ez') }}#}
+        {{ pagerfanta(elements, 'ez') }}
     </section>
 {% endblock %}
 

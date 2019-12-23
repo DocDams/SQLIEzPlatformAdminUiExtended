@@ -20,6 +20,8 @@ final class Entity implements SQLIClassAnnotation
     public $delete = false;
     /** @var string */
     public $description = "";
+    /** @var int */
+    public $max_per_page = 10;
 
     /**
      * @return bool
@@ -51,5 +53,13 @@ final class Entity implements SQLIClassAnnotation
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxPerPage(): int
+    {
+        return $this->max_per_page;
     }
 }

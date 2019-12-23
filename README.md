@@ -148,6 +148,7 @@ Class annotation `Entity` has following properties :
 - **update** Allow update of a line in table
 - **delete** Allow deletion of a line in table
 - **create** Allow creation of new line in table
+- **max_per_page** Number of elements per page (Pagerfanta)
 
 Property annotation `EntityProperty` has following properties :
 - **description** Description
