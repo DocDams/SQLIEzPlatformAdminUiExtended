@@ -11,17 +11,14 @@ services:
         autowire: true
         autoconfigure: true
         public: false
-        arguments:
-            - '@service_container'
         tags:
             - { name: twig.extension }
 
     sqli_admin_entities:
         class: SQLI\EzPlatformAdminUiExtendedBundle\Services\EntityHelper
         public: true
-        arguments:
-            - "@doctrine.orm.entity_manager"
-            - "@sqli_admin_annotation_entities"
+        autowire: true
+        autoconfigure: true
 
     sqli_admin_annotation_entities:
         class: SQLI\EzPlatformAdminUiExtendedBundle\Annotations\SQLIAnnotationManager

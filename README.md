@@ -72,7 +72,12 @@ use SQLI\EzPlatformAdminUiExtendedBundle\Annotations\Annotation as SQLIAdmin;
  * @package Acme\AcmeBundle\Entity\Doctrine
  * @ORM\Table(name="my_entity")
  * @ORM\Entity(repositoryClass="Acme\AcmeBundle\Repository\Doctrine\MyEntityRepository")
- * @SQLIAdmin\Entity(update=true,create=true,delete=false,description="Describe your entity")
+ * @SQLIAdmin\Entity(update=true,
+ *                   create=true,
+ *                   delete=false,
+ *                   csv_exportable=false,
+ *                   max_per_page=5,
+ *                   description="Describe your entity")
  */
 class MyEntity
 {
@@ -149,6 +154,7 @@ Class annotation `Entity` has following properties :
 - **delete** Allow deletion of a line in table
 - **create** Allow creation of new line in table
 - **max_per_page** Number of elements per page (Pagerfanta)
+- **csv_exportable** Allow data CSV export for the entity
 
 Property annotation `EntityProperty` has following properties :
 - **description** Description

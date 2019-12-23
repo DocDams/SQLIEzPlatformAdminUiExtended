@@ -27,10 +27,11 @@
                 {{ "entity.elements.table.header"|trans({'%fqcn%': fqcn})|raw }}
             </div>
             <div>
+                {{ block( 'sqli_entity_export_csv') }}
                 {{ block( 'sqli_entity_create_element') }}
             </div>
         </div>
-        {% if elements|length == 0 %}
+        {% if pager.currentPageResults|length == 0 %}
             <p class="alert alert-warning">{{ 'entity.elements.table.no_elements'|trans }}</p>
         {% else %}
             <table class="table">
@@ -47,13 +48,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for element in elements.currentPageResults %}
+                {% for element in pager.currentPageResults %}
                     {{ block( 'sqli_entity_element' ) }}
                 {% endfor %}
                 </tbody>
             </table>
         {% endif %}
-        {{ pagerfanta(elements, 'ez') }}
+        {{ pagerfanta(pager, 'ez') }}
     </section>
 {% endblock %}
 
@@ -113,6 +114,19 @@
            class="btn btn-primary">
             <svg class="ez-icon ez-icon-create">
                 <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#create"></use>
+            </svg>
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block sqli_entity_export_csv %}
+    {% if class.annotation.csv_exportable and is_granted( 'ez:sqli_admin:entity_export_csv' ) %}
+        <a title="{{ 'entity.button.alt.export_csv'|trans|desc('Export into CSV file') }}"
+           href="{{ path( 'sqli_ez_platform_admin_ui_extended_entity_export_csv',
+               { 'fqcn': fqcn } ) }}"
+           class="btn btn-primary">
+            <svg class="ez-icon ez-icon-form-data">
+                <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#form-data"></use>
             </svg>
         </a>
     {% endif %}

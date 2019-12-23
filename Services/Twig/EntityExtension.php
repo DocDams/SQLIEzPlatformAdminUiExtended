@@ -2,15 +2,19 @@
 
 namespace SQLI\EzPlatformAdminUiExtendedBundle\Services\Twig;
 
+use SQLI\EzPlatformAdminUiExtendedBundle\Services\EntityHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class EntityExtension extends \Twig_Extension
 {
     protected $container;
+    /** @var EntityHelper */
+    private $entityHelper;
 
-    public function __construct( ContainerInterface $container )
+    public function __construct( ContainerInterface $container, EntityHelper $entityHelper )
     {
-        $this->container = $container;
+        $this->container    = $container;
+        $this->entityHelper = $entityHelper;
     }
 
     public function getFunctions()
@@ -40,15 +44,7 @@ class EntityExtension extends \Twig_Extension
     {
         try
         {
-            if( $object[$property_name] instanceof \DateTime )
-            {
-                // Datetime doesn't have a __toString method
-                return date_format( $object[$property_name], "c" );
-            }
-            else
-            {
-                return strval( $object[$property_name] );
-            }
+            return $this->entityHelper->attributeValue( $object, $property_name );
         }
         catch( \ErrorException $exception )
         {

@@ -17,3 +17,7 @@ sqli_ez_platform_admin_ui_extended_entity_edit_element:
 sqli_ez_platform_admin_ui_extended_entity_create_element:
     path: /sqli-admin/entity/{fqcn}/create
     defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:createElement }
+
+sqli_ez_platform_admin_ui_extended_entity_export_csv:
+    path: /sqli-admin/entity/{fqcn}/csv
+    defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:exportCSV }

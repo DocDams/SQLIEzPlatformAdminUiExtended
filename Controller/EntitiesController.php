@@ -2,6 +2,8 @@
 
 namespace SQLI\EzPlatformAdminUiExtendedBundle\Controller;
 
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
 use ReflectionException;
 use SQLI\EzPlatformAdminUiExtendedBundle\Annotations\Annotation\Entity;
 use SQLI\EzPlatformAdminUiExtendedBundle\Form\EditElementType;
@@ -9,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class EntitiesController extends Controller
 {
@@ -40,8 +43,18 @@ class EntitiesController extends Controller
 
         // Entity informations and all elements
         $params = $this->get( 'sqli_admin_entities' )->getEntity( $fqcn );
+
         // Change current page on PagerFanta
-        $params['elements']->setCurrentPage( $request->get( 'page', 1 ) );
+        /** @var Entity $classAnnotation */
+        $classAnnotation = $params['class']['annotation'];
+        // Create a pager from array of elements
+        $pager           = new Pagerfanta( new ArrayAdapter( $params['elements'] ) );
+        // Define max elements per page (can be defined in class' annotation)
+        $pager->setMaxPerPage( $classAnnotation->getMaxPerPage() );
+        // Define current page
+        $pager->setCurrentPage( $request->get( 'page', 1 ) );
+        // Set pager for template
+        $params['pager'] = $pager;
 
         return $this->render( 'SQLIEzPlatformAdminUiExtendedBundle:Entities:showEntity.html.twig', $params );
     }
@@ -273,5 +286,71 @@ class EntitiesController extends Controller
         // Redirect to entity homepage (list of elements)
         return $this->redirectToRoute( 'sqli_ez_platform_admin_ui_extended_entity_homepage',
                                        [ 'fqcn' => $fqcn ] );
+    }
+
+    public function exportCSVAction( $fqcn )
+    {
+        $this->denyAccessUnlessGranted( 'ez:sqli_admin:entity_export_csv' );
+
+        $response = new StreamedResponse();
+
+        // Check if class annotation allow CSV export
+        $entity = $this->get( 'sqli_admin_entities' )->getEntity( $fqcn, false );
+
+        if( array_key_exists( 'class', $entity ) && array_key_exists( 'annotation', $entity['class'] ) )
+        {
+            $entityAnnotation = $entity['class']['annotation'];
+            // Check if annotation exists
+            if( $entityAnnotation instanceof Entity )
+            {
+                // Check if CSV exportation is allowed
+                if( $entityAnnotation->isCSVExportable() )
+                {
+                    // Find element
+                    $entityInformations = $this->get( 'sqli_admin_entities' )->getEntity( $fqcn, true );
+
+                    $response->setCallback( function() use ( $entityInformations )
+                    {
+                        // Open buffer
+                        $resource = fopen( 'php://output', 'w+' );
+
+                        $columns = [];
+                        foreach( $entityInformations['class']['properties'] as $property_name => $property_infos )
+                        {
+                            if( $property_infos['visible'] )
+                            {
+                                $columns[] = $property_name;
+                            }
+                        }
+
+                        // Add CSV headers
+                        fputcsv( $resource, $columns );
+
+                        // Add datas
+                        foreach( $entityInformations['elements'] as $element )
+                        {
+                            $elementDatas = [];
+                            // Get value for each column
+                            foreach( $columns as $column )
+                            {
+                                $elementDatas[] = $this->get( 'sqli_admin_entities' )->attributeValue( $element, $column );
+                            }
+                            // Add line
+                            fputcsv( $resource, $elementDatas );
+                        }
+
+                        // Close buffer
+                        fclose( $resource );
+                    });
+                }
+            }
+        }
+        $filename = str_replace( "\\", "_", $fqcn );
+
+        $response->setStatusCode( 200 );
+        $response->headers->set( 'Content-Type', 'text/csv; charset=utf-8' );
+        $response->headers->set( 'Content-Disposition', "attachment; filename=\"export-{$filename}.csv\"" );
+
+        return $response;
     }
 }

@@ -22,6 +22,8 @@ final class Entity implements SQLIClassAnnotation
     public $description = "";
     /** @var int */
     public $max_per_page = 10;
+    /** @var bool */
+    public $csv_exportable = false;
 
     /**
      * @return bool
@@ -61,5 +63,13 @@ final class Entity implements SQLIClassAnnotation
     public function getMaxPerPage(): int
     {
         return $this->max_per_page;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCSVExportable(): bool
+    {
+        return $this->csv_exportable;
     }
 }

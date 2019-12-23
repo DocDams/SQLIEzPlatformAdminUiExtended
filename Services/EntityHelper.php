@@ -4,9 +4,6 @@ namespace SQLI\EzPlatformAdminUiExtendedBundle\Services;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Pagerfanta;
-use SQLI\EzPlatformAdminUiExtendedBundle\Annotations\Annotation\Entity;
 use SQLI\EzPlatformAdminUiExtendedBundle\Annotations\SQLIAnnotationManager;
 
 class EntityHelper
@@ -67,25 +64,20 @@ class EntityHelper
         $annotatedClass['fqcn']  = $fqcn;
         $annotatedClass['class'] = $this->getAnnotatedClass( $fqcn );
 
-        // Prepare a filter (only properties flagged as visible or without this annotation) for findAll
-        $filteredColums = [];
-        foreach( $annotatedClass['class']['properties'] as $propertyName => $propertyInfos )
-        {
-            if( $propertyInfos['visible'] )
-            {
-                $filteredColums[] = $propertyName;
-            }
-        }
-
         if( $fetchElements )
         {
-            // Get all elements
-            /** @var Entity $classAnnotation */
-            $classAnnotation = $annotatedClass['class']['annotation'];
-            $pager           = new Pagerfanta( new ArrayAdapter( $this->findAll( $fqcn, $filteredColums ) ) );
-            $pager->setMaxPerPage( $classAnnotation->getMaxPerPage() );
+            // Prepare a filter (only properties flagged as visible or without this annotation) for findAll
+            $filteredColums = [];
+            foreach( $annotatedClass['class']['properties'] as $propertyName => $propertyInfos )
+            {
+                if( $propertyInfos['visible'] )
+                {
+                    $filteredColums[] = $propertyName;
+                }
+            }
 
-            $annotatedClass['elements'] = $pager;
+            // Get all elements
+            $annotatedClass['elements'] = $this->findAll( $fqcn, $filteredColums );
         }
 
         return $annotatedClass;
@@ -159,5 +151,23 @@ class EntityHelper
     public function findOneBy( $entityClass, $findCriteria )
     {
         return $this->entityManager->getRepository( $entityClass )->findOneBy( $findCriteria );
+    }
+
+    /**
+     * @param $object
+     * @param $property_name
+     * @return false|string
+     */
+    public function attributeValue( $object, $property_name )
+    {
+        if( $object[$property_name] instanceof \DateTime )
+        {
+            // Datetime doesn't have a __toString method
+            return date_format( $object[$property_name], "c" );
+        }
+        else
+        {
+            return strval( $object[$property_name] );
+        }
     }
 }
