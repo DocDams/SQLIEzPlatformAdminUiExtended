@@ -2,13 +2,6 @@ sqli_ez_platform_admin_ui_extended_entities_homepage:
     path: /sqli-admin/entities/home
     defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:listAllEntities }
 
-sqli_ez_platform_admin_ui_extended_entity_homepage:
-    path: /sqli-admin/entity/{fqcn}/{sort_column}/{sort_order}
-    controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:showEntity
-    defaults:
-        sort_column: 'id'
-        sort_order: 'ASC'
-
 sqli_ez_platform_admin_ui_extended_entity_remove_element:
     path: /sqli-admin/entity/{fqcn}/remove/{compound_id}
     defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:removeElement }
@@ -24,3 +17,11 @@ sqli_ez_platform_admin_ui_extended_entity_create_element:
 sqli_ez_platform_admin_ui_extended_entity_export_csv:
     path: /sqli-admin/entity/{fqcn}/csv
     defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:exportCSV }
+
+# Keep this route at end
+sqli_ez_platform_admin_ui_extended_entity_homepage:
+    path: /sqli-admin/entity/{fqcn}/{sort_column}/{sort_order}
+    controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:showEntity
+    defaults:
+        sort_column: 'id'
+        sort_order: 'ASC'
