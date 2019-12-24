@@ -3,9 +3,10 @@
 {% trans_default_domain 'sqli_admin' %}
 
 {% block breadcrumbs %}
+    {% set keytrad = constant('SQLI\\EzPlatformAdminUiExtendedBundle\\Menu\\MenuListener::SQLI_ADMIN_MENU_ENTITIES_TAB_PREFIX') ~ tabname %}
     {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
         { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
-        { value: 'entities.breadcrumb.list'|trans|desc('Entities') },
+        { value: keytrad|trans( {}, 'sqli_admin' )|desc('Entities') },
     ]} %}
 {% endblock %}
 

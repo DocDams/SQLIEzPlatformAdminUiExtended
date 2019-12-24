@@ -20,6 +20,12 @@ services:
         autowire: true
         autoconfigure: true
 
+    sqli_admin_tab_entities:
+        class: SQLI\EzPlatformAdminUiExtendedBundle\Services\TabEntityHelper
+        public: true
+        autowire: true
+        autoconfigure: true
+
     sqli_admin_annotation_entities:
         class: SQLI\EzPlatformAdminUiExtendedBundle\Annotations\SQLIAnnotationManager
         public: true

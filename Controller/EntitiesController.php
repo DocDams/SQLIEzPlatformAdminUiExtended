@@ -18,14 +18,17 @@ class EntitiesController extends Controller
     /**
      * Display all entities annotated with SQLIAdmin\Entity
      *
+     * @param $tabname
      * @return Response
      * @throws ReflectionException
      */
-    public function listAllEntitiesAction()
+    public function listAllEntitiesAction( $tabname )
     {
         $this->denyAccessUnlessGranted( 'ez:sqli_admin:list_entities' );
 
-        $params['classes'] = $this->get( 'sqli_admin_entities' )->getAnnotatedClasses();
+        $tabs              = $this->get( 'sqli_admin_tab_entities' )->entitiesGroupedByTab();
+        $params['tabname'] = $tabname;
+        $params['classes'] = $tabs[$tabname];
 
         return $this->render( 'SQLIEzPlatformAdminUiExtendedBundle:Entities:listAllEntities.html.twig', $params );
     }
@@ -256,8 +259,9 @@ class EntitiesController extends Controller
                     else
                     {
                         // Display form
-                        $params['form'] = $form->createView();
-                        $params['fqcn'] = $fqcn;
+                        $params['form']    = $form->createView();
+                        $params['fqcn']    = $fqcn;
+                        $params['tabname'] = $entityAnnotation->getTabname();
 
                         return $this
                             ->render( 'SQLIEzPlatformAdminUiExtendedBundle:Entities:createElement.html.twig',

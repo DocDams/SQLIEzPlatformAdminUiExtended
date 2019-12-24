@@ -56,7 +56,7 @@ sqli_ez_platform_admin_ui_extended:
         - { directory: 'Acme/AcmeBundle/Entity/Doctrine' }
         - { directory: 'Acme/AcmeBundle2/Entity/Doctrine', namespace: 'Acme\AcmeBundle2NoPSR0\ORM\Doctrine' }
 ```
-Use "~" if the namespace of your classes observ PSR-0 rules or specify directory which contains them.
+Use "~" if the namespace of your classes observe PSR-0 rules or specify directory which contains them.
 
 Annotations on entities :
 
@@ -77,6 +77,7 @@ use SQLI\EzPlatformAdminUiExtendedBundle\Annotations\Annotation as SQLIAdmin;
  *                   delete=false,
  *                   csv_exportable=false,
  *                   max_per_page=5,
+ *                   tabname="other_tab"
  *                   description="Describe your entity")
  */
 class MyEntity
@@ -155,6 +156,7 @@ Class annotation `Entity` has following properties :
 - **create** Allow creation of new line in table
 - **max_per_page** Number of elements per page (Pagerfanta)
 - **csv_exportable** Allow data CSV export for the entity
+- **tabname** Group this entity in a tab under top menu instead of default tab
 
 Property annotation `EntityProperty` has following properties :
 - **description** Description
@@ -179,3 +181,13 @@ List of supported Doctrine types :
 - object (Using [serialization](https://www.php.net/manual/en/language.oop5.serialization.php))
 
 **NOTICE** : Be careful if you choose to specify the return type on getters : in creation mode, getters will return 'null' so please provide a default value or nullable in type of return (see getter in above class example)
+
+### Tab
+
+Specifying class annotation `tabname` for an entity will create a new tab under main top menu.  
+Label for this tab can be define in translation domain `sqli_admin` with this key :  
+sqli_admin__menu_entities_tab__***tabname***
+
+Example for `default` tab :
+
+sqli_admin__menu_entities_tab__default: "Entités Doctrine"

@@ -5,10 +5,11 @@
 {% trans_default_domain 'sqli_admin' %}
 
 {% block breadcrumbs %}
+    {% set keytrad = constant('SQLI\\EzPlatformAdminUiExtendedBundle\\Menu\\MenuListener::SQLI_ADMIN_MENU_ENTITIES_TAB_PREFIX') ~ class.annotation.tabname %}
     {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
         { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
-        { value: 'entities.breadcrumb.list'|trans|desc('Entity'),
-            url: path( 'sqli_ez_platform_admin_ui_extended_entities_homepage' ) },
+        { value: keytrad|trans( {}, 'sqli_admin' )|desc('Entities'),
+            url: path( 'sqli_ez_platform_admin_ui_extended_entities_homepage', { 'tabname': class.annotation.tabname } ) },
         { value: fqcn,
             url: path( 'sqli_ez_platform_admin_ui_extended_entity_homepage', { 'fqcn': fqcn } ) },
         { value: 'entity.button.alt.edit'|trans },

@@ -1,6 +1,8 @@
 sqli_ez_platform_admin_ui_extended_entities_homepage:
-    path: /sqli-admin/entities/home
-    defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:listAllEntities }
+    path: /sqli-admin/entities/{tabname}
+    controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:listAllEntities
+    defaults:
+        tabname: 'default'
 
 sqli_ez_platform_admin_ui_extended_entity_remove_element:
     path: /sqli-admin/entity/{fqcn}/remove/{compound_id}

@@ -24,6 +24,8 @@ final class Entity implements SQLIClassAnnotation
     public $max_per_page = 10;
     /** @var bool */
     public $csv_exportable = false;
+    /** @var string */
+    public $tabname = "default";
 
     /**
      * @return bool
@@ -71,5 +73,10 @@ final class Entity implements SQLIClassAnnotation
     public function isCSVExportable(): bool
     {
         return $this->csv_exportable;
+    }
+
+    public function getTabname(): string
+    {
+        return $this->tabname;
     }
 }
