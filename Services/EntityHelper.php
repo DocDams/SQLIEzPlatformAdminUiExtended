@@ -5,6 +5,7 @@ namespace SQLI\EzPlatformAdminUiExtendedBundle\Services;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use SQLI\EzPlatformAdminUiExtendedBundle\Annotations\SQLIAnnotationManager;
+use SQLI\EzPlatformAdminUiExtendedBundle\Classes\Filter;
 
 class EntityHelper
 {
@@ -12,11 +13,15 @@ class EntityHelper
     private $entityManager;
     /** @var SQLIAnnotationManager */
     private $annotationManager;
+    /** @var FilterEntityHelper */
+    private $filterEntityHelper;
 
-    public function __construct( EntityManagerInterface $entityManager, SQLIAnnotationManager $annotationManager )
+    public function __construct( EntityManagerInterface $entityManager, SQLIAnnotationManager $annotationManager,
+                                 FilterEntityHelper $filterEntityHelper )
     {
-        $this->entityManager     = $entityManager;
-        $this->annotationManager = $annotationManager;
+        $this->entityManager      = $entityManager;
+        $this->annotationManager  = $annotationManager;
+        $this->filterEntityHelper = $filterEntityHelper;
     }
 
     /**
@@ -54,14 +59,13 @@ class EntityHelper
     /**
      * Get an entity with her information and elements
      *
-     * @param string      $fqcn
-     * @param bool        $fetchElements
-     * @param bool|string $sort_column Column name to sort results
-     * @param bool|string $sort_order ASC|DESC
+     * @param string     $fqcn
+     * @param bool       $fetchElements
+     * @param bool|array $sort Array( 'column_name' => '', 'order' => 'ASC|DESC' )
      * @return mixed
      * @throws \ReflectionException
      */
-    public function getEntity( $fqcn, $fetchElements = true, $sort_column = false, $sort_order = false )
+    public function getEntity( $fqcn, $fetchElements = true, $sort = false )
     {
         $annotatedClass['fqcn']  = $fqcn;
         $annotatedClass['class'] = $this->getAnnotatedClass( $fqcn );
@@ -78,8 +82,11 @@ class EntityHelper
                 }
             }
 
+            // Get filter in session if exists
+            $filter = $this->filterEntityHelper->getFilter( $fqcn );
+
             // Get all elements
-            $annotatedClass['elements'] = $this->findAll( $fqcn, $filteredColums, $sort_column, $sort_order );
+            $annotatedClass['elements'] = $this->findAll( $fqcn, $filteredColums, $filter, $sort );
         }
 
         return $annotatedClass;
@@ -90,11 +97,11 @@ class EntityHelper
      *
      * @param string      $entityClass FQCN
      * @param array|null  $filteredColums
-     * @param bool|string $sort_column Column name to sort results
-     * @param bool|string $sort_order ASC|DESC
+     * @param Filter|null $filter
+     * @param bool|array  $sort Array( 'column_name' => '', 'order' => 'ASC|DESC' )
      * @return array
      */
-    public function findAll( $entityClass, $filteredColums = null, $sort_column = false, $sort_order = false )
+    public function findAll( $entityClass, $filteredColums = null, $filter = null, $sort = false )
     {
         /** @var $repository EntityRepository */
         $repository   = $this->entityManager->getRepository( $entityClass );
@@ -113,9 +120,30 @@ class EntityHelper
             $queryBuilder->select( $select );
         }
 
-        if( $sort_column !== false )
+        // Filter
+        if( !is_null( $filter ) )
         {
-            $queryBuilder->orderBy( "entity.$sort_column", ( $sort_order == "ASC" ? "ASC" : "DESC" ) );
+            // Add clause 'where'
+            $queryBuilder->andWhere( sprintf( "entity.%s %s :value",
+                                              $filter->getColumnName(),
+                                              array_search( $filter->getOperand(), Filter::OPERANDS_MAPPING ) ) );
+
+            $value = $filter->getValue();
+
+            // Add % around value if operand is LIKE or NOT LIKE
+            if( stripos( $filter->getOperand(), 'LIKE' ) !== false )
+            {
+                $value = "%" . $value . "%";
+            }
+
+            // Bind parameter
+            $queryBuilder->setParameter( 'value', $value );
+        }
+
+        // Sort
+        if( $sort !== false )
+        {
+            $queryBuilder->orderBy( "entity." . $sort['column_name'], ( $sort['order'] == "ASC" ? "ASC" : "DESC" ) );
         }
 
         // Return results as array (ignore accessibility of properties)

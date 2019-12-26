@@ -23,6 +23,34 @@
 
 {% block content %}
     <section class="container my-4">
+        {# Filters filter_form #}
+        {{ form_start( filter_form ) }}
+        <table class="table ez-table--list">
+            <thead>
+            <tr>
+                <th class="ez-table__cell ez-table__cell--header" colspan="4">Filtre</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="ez-table__row">
+                <td>
+                    {{ form_widget( filter_form.column_name ) }}
+                </td>
+                <td>
+                    {{ form_widget( filter_form.operand ) }}
+                </td>
+                <td>
+                    {{ form_widget( filter_form.value ) }}
+                </td>
+                <td>
+                    {{ form_widget( filter_form.filter ) }}
+                    <a class="btn" href="{{ path('sqli_ez_platform_admin_ui_extended_entity_homepage', {'fqcn': fqcn}) }}">Reset</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        {{ form_end( filter_form ) }}
+
         <div class="ez-table-header">
             <div class="ez-table-header__headline">
                 {{ "entity.elements.table.header"|trans({'%fqcn%': fqcn})|raw }}

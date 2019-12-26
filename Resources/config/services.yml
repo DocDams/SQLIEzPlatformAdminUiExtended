@@ -26,6 +26,12 @@ services:
         autowire: true
         autoconfigure: true
 
+    sqli_admin_filter_entity:
+        class: SQLI\EzPlatformAdminUiExtendedBundle\Services\FilterEntityHelper
+        public: true
+        autowire: true
+        autoconfigure: true
+
     sqli_admin_annotation_entities:
         class: SQLI\EzPlatformAdminUiExtendedBundle\Annotations\SQLIAnnotationManager
         public: true

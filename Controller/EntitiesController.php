@@ -6,7 +6,9 @@ use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use ReflectionException;
 use SQLI\EzPlatformAdminUiExtendedBundle\Annotations\Annotation\Entity;
+use SQLI\EzPlatformAdminUiExtendedBundle\Classes\Filter;
 use SQLI\EzPlatformAdminUiExtendedBundle\Form\EditElementType;
+use SQLI\EzPlatformAdminUiExtendedBundle\Form\FilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,8 +49,31 @@ class EntitiesController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ez:sqli_admin:entity_show' );
 
-        // Entity informations and all elements
-        $params = $this->get( 'sqli_admin_entities' )->getEntity( $fqcn, true, $sort_column, $sort_order );
+        $classInformations = $this->get( 'sqli_admin_entities' )->getAnnotatedClass( $fqcn );
+
+        $sort = [ 'column_name' => $sort_column, 'order' => $sort_order ];
+
+        // FormType : class_informations
+        $filter = new Filter();
+        $filterForm = $this->createForm( FilterType::class, $filter, [ 'class_informations' => $classInformations ] );
+
+        $filterForm->handleRequest( $request );
+
+        if( $filterForm->isSubmitted() && $filterForm->isValid() )
+        {
+            // Set filter in session, it will be retrieved in getEntity()
+            $this->get('sqli_admin_filter_entity')->setFilter( $fqcn, $filter );
+            // Entity informations and all elements with sort (filter in session)
+            $params     = $this->get( 'sqli_admin_entities' )->getEntity( $fqcn, true, $sort );
+        }
+        else
+        {
+            // Entity informations and all elements without any filter
+            $params = $this->get( 'sqli_admin_entities' )->getEntity( $fqcn, true, $sort );
+        }
+
+        // Generate filter form for the view
+        $params['filter_form'] = $filterForm->createView();
 
         // Change current page on PagerFanta
         /** @var Entity $classAnnotation */
