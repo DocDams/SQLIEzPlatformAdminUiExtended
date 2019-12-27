@@ -44,7 +44,10 @@
                 </td>
                 <td>
                     {{ form_widget( filter_form.filter ) }}
-                    <a class="btn" href="{{ path('sqli_ez_platform_admin_ui_extended_entity_homepage', {'fqcn': fqcn}) }}">Reset</a>
+                    <a class="btn"
+                       href="{{ path('sqli_ez_platform_admin_ui_extended_entity_homepage_reset_filter', {'fqcn': fqcn}) }}">
+                        {{ 'entity.button.label.reset'|trans( {}, 'sqli_admin' ) }}
+                    </a>
                 </td>
             </tr>
             </tbody>

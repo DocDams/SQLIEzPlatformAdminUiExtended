@@ -67,8 +67,8 @@ class EditElementRightSidebarBuilder extends AbstractBuilder implements Translat
     public static function getTranslationMessages(): array
     {
         return [
-            ( new Message( self::ITEM__SAVE, 'menu' ) )->setDesc( 'Save' ),
-            ( new Message( self::ITEM__CANCEL, 'menu' ) )->setDesc( 'Discard changes' ),
+            ( new Message( self::ITEM__SAVE, 'sqli_admin' ) )->setDesc( 'Save' ),
+            ( new Message( self::ITEM__CANCEL, 'sqli_admin' ) )->setDesc( 'Discard changes' ),
         ];
     }
 }

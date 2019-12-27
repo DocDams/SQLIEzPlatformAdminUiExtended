@@ -20,6 +20,10 @@ sqli_ez_platform_admin_ui_extended_entity_export_csv:
     path: /sqli-admin/entity/{fqcn}/csv
     defaults: { _controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:exportCSV }
 
+sqli_ez_platform_admin_ui_extended_entity_homepage_reset_filter:
+    path: /sqli-admin/entity/{fqcn}/reset
+    controller: SQLIEzPlatformAdminUiExtendedBundle:Entities:resetFilter
+
 # Keep this route at end
 sqli_ez_platform_admin_ui_extended_entity_homepage:
     path: /sqli-admin/entity/{fqcn}/{sort_column}/{sort_order}

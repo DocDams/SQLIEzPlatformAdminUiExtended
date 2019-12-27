@@ -44,4 +44,12 @@ class FilterEntityHelper
 
         return array_key_exists( $fqcn, $filters ) ? $filters[$fqcn] : null;
     }
+
+    public function resetFilter( $fqcn )
+    {
+        $filters = $this->session->get( self::SESSION_VARNAME, [] );
+        unset( $filters[$fqcn] );
+
+        $this->session->set( self::SESSION_VARNAME, $filters );
+    }
 }

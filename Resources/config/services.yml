@@ -6,6 +6,12 @@ services:
         public: false
         exclude: "../../Controller/{Controller}"
 
+    SQLI\EzPlatformAdminUiExtendedBundle\Form\:
+        resource: "../../Form/*"
+        autowire: true
+        autoconfigure: true
+        public: false
+
     SQLI\EzPlatformAdminUiExtendedBundle\Services\Twig\:
         resource: '../../Services/Twig/*'
         autowire: true

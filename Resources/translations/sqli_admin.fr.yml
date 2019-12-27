@@ -23,6 +23,11 @@ entity.element.cannot_delete: "Suppression impossible"
 entity.element.cannot_update: "Modification impossible"
 entity.element.cannot_create: "Création impossible"
 
+# Filter form in entity view
+entity.button.label.filter: "Filtrer"
+entity.button.label.reset: "Reset"
+entity.field.placeholder.value: "Valeur"
+
 # Right Sidebar
 edit_element__sidebar_right__save: "Enregistrer"
 edit_element__sidebar_right__cancel: "Annuler"

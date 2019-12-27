@@ -54,7 +54,7 @@ class EntitiesController extends Controller
         $sort = [ 'column_name' => $sort_column, 'order' => $sort_order ];
 
         // FormType : class_informations
-        $filter = new Filter();
+        $filter     = new Filter();
         $filterForm = $this->createForm( FilterType::class, $filter, [ 'class_informations' => $classInformations ] );
 
         $filterForm->handleRequest( $request );
@@ -62,9 +62,9 @@ class EntitiesController extends Controller
         if( $filterForm->isSubmitted() && $filterForm->isValid() )
         {
             // Set filter in session, it will be retrieved in getEntity()
-            $this->get('sqli_admin_filter_entity')->setFilter( $fqcn, $filter );
+            $this->get( 'sqli_admin_filter_entity' )->setFilter( $fqcn, $filter );
             // Entity informations and all elements with sort (filter in session)
-            $params     = $this->get( 'sqli_admin_entities' )->getEntity( $fqcn, true, $sort );
+            $params = $this->get( 'sqli_admin_entities' )->getEntity( $fqcn, true, $sort );
         }
         else
         {
@@ -154,6 +154,20 @@ class EntitiesController extends Controller
     }
 
     /**
+     * Delete filter for specified FQCN and redirect to entity view
+     *
+     * @param $fqcn
+     * @return RedirectResponse
+     */
+    public function resetFilterAction( $fqcn )
+    {
+        $this->get( 'sqli_admin_filter_entity' )->resetFilter( $fqcn );
+
+        return $this->redirectToRoute( 'sqli_ez_platform_admin_ui_extended_entity_homepage',
+                                       [ 'fqcn' => $fqcn ] );
+    }
+
+    /**
      * Show edit form and save modifications
      *
      * @param string  $fqcn FQCN
@@ -204,8 +218,9 @@ class EntitiesController extends Controller
                         else
                         {
                             // Display form
-                            $params['form'] = $form->createView();
-                            $params['fqcn'] = $fqcn;
+                            $params['form']  = $form->createView();
+                            $params['fqcn']  = $fqcn;
+                            $params['class'] = $entity['class'];
 
                             return $this
                                 ->render( 'SQLIEzPlatformAdminUiExtendedBundle:Entities:editElement.html.twig',
