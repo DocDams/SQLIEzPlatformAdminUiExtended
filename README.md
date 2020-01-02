@@ -58,6 +58,10 @@ sqli_ez_platform_admin_ui_extended:
 ```
 Use "~" if the namespace of your classes observe PSR-0 rules or specify directory which contains them.
 
+*(Optional) Change label tabname*
+
+You can change label of the default tab using this translation key for domain `sqli_admin` : **sqli_admin__menu_entities_tab__default**
+
 Annotations on entities :
 
 ```php
@@ -188,6 +192,6 @@ Specifying class annotation `tabname` for an entity will create a new tab under 
 Label for this tab can be define in translation domain `sqli_admin` with this key :  
 sqli_admin__menu_entities_tab__***tabname***
 
-Example for `default` tab :
+Traduction for `default` tab :
 
 sqli_admin__menu_entities_tab__default: "Entités Doctrine"

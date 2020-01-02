@@ -9,16 +9,29 @@
 namespace SQLI\EzPlatformAdminUiExtendedBundle\Menu;
 
 use EzSystems\EzPlatformAdminUi\Menu\AbstractBuilder;
+use EzSystems\EzPlatformAdminUi\Menu\MenuItemFactory;
 use InvalidArgumentException;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Knp\Menu\ItemInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
-class EditElementRightSidebarBuilder extends AbstractBuilder implements TranslationContainerInterface
+class EditElementRightSidebarBuilder extends AbstractBuilder
 {
     /* Menu items */
     const ITEM__SAVE   = 'edit_element__sidebar_right__save';
     const ITEM__CANCEL = 'edit_element__sidebar_right__cancel';
+
+    /** @var TranslatorInterface */
+    protected $translator;
+
+    public function __construct( MenuItemFactory $factory, EventDispatcherInterface $eventDispatcher,
+                                 TranslatorInterface $translator )
+    {
+        parent::__construct( $factory, $eventDispatcher );
+        $this->translator = $translator;
+    }
 
     /**
      * @return string
@@ -46,6 +59,7 @@ class EditElementRightSidebarBuilder extends AbstractBuilder implements Translat
                                             'class'      => 'btn--trigger',
                                             'data-click' => sprintf( '#%s', $options['save_button_name'] ),
                                         ],
+                                        'label' => $this->translator->trans( self::ITEM__SAVE, [], 'sqli_admin' ),
                                         'extras'     => [ 'icon' => 'save' ],
                                     ]
                                 ),
@@ -53,22 +67,12 @@ class EditElementRightSidebarBuilder extends AbstractBuilder implements Translat
                                     self::ITEM__CANCEL,
                                     [
                                         'uri' => $options['cancel_url'],
+                                        'label' => $this->translator->trans( self::ITEM__CANCEL, [], 'sqli_admin' ),
                                         'extras'     => [ 'icon' => 'circle-close' ],
                                     ]
                                 ),
                             ] );
 
         return $menu;
-    }
-
-    /**
-     * @return Message[]
-     */
-    public static function getTranslationMessages(): array
-    {
-        return [
-            ( new Message( self::ITEM__SAVE, 'sqli_admin' ) )->setDesc( 'Save' ),
-            ( new Message( self::ITEM__CANCEL, 'sqli_admin' ) )->setDesc( 'Discard changes' ),
-        ];
     }
 }
