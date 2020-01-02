@@ -20,7 +20,7 @@ class TabEntityHelper
     public function entitiesGroupedByTab()
     {
         // Sorted classes by tabname
-        $tabsEntities = [];
+        $tabsEntities = [ 'default' => null ];
 
         // Annotated classes
         $annotatedClasses = $this->entityHelper->getAnnotatedClasses();
